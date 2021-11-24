@@ -1,22 +1,20 @@
-# Sparkify Data Modelling and ETL using Postgres
+# Sparkify Data Modelling and ETL using Apache Cassandra
 
 ## Motivation
 
-The startup, Sparkify, is a music streaming app and wants to analyse what songs their users are listening to. Their current data is available as local JSON files and cannot be easily analised. The purpose of the ETL process is to create a data model, process the JSON data in the files and load into a Postgres database.
+The startup, Sparkify, is a music streaming app and wants to analyse what songs their users are listening to. Their current data is available as local CSV files and cannot be easily analised. The purpose of the ETL process is to create a tables for fast queries with an Apache Cassandra database.
 
 ## Data model
 
-Data was normalized into a start schema with fact and dimention tables in order to use data for the analysis but also reuse data for future analysis. On the `songplays` table, there is only one row that mathces both `song_id` and `artist_id` as the provided dataset is only a subset of the larger dataset.
+A denormalized dataset was created to match the three specific queries that needed to be executed:
 
-![Data model](images/diagram.png)
+1. Give the artist, song title and song's length that was heard during a specific sessionId and itemInSession
+2. Give the artist, song (sorted by itemInSession) and user (first and last name) for a specific userid and sessionid
+3. Give every user name (first and last) who listened to a specific the song
 
 ## File descriptions
 
-- `create_tables.py`: Connects to Postgres database, drops existing database, create an empty database and required tables.
-- `sql_queries.py`: Contains all the SQL queries used to setup the database as well as processing the data.
-- `etl.py`: Load JSON files (song and log files), process data and load into database.
-
-**NOTE: Need to run `create_tables.py` before running `etl.py`.**
+- `import-to-cassandra.ipynb`: Imports individual CSV files, create Cassandra database, create tables and insert data into tables, and finally drop tables.
 
 ## How to run the files and notebooks
 
